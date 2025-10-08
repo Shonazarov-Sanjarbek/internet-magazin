@@ -1,0 +1,9 @@
+@import "./variable";
+@import "./reset";
+@import "./mixin";
+
+@import "../components/products/products";
+@import "../components/navbar/navbar";
+
+@import "../page/adminlogin/adminlogin";
+@import "../page/adminPanel/adminpanel";

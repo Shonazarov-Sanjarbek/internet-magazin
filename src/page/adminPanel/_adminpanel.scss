@@ -1,0 +1,277 @@
+.admin-panel {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+
+  h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 700;
+    color: #222;
+  }
+
+  // ====== FORM ======
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+
+    input,
+    textarea {
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      outline: none;
+      transition: border-color 0.2s;
+
+      &:focus {
+        border-color: #007bff;
+      }
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: none;
+    }
+
+    /* === Rasm yuklash (file input) === */
+    .image-upload {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+      border: 2px dashed #ccc;
+      border-radius: 12px;
+      background-color: #fafafa;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        border-color: #007bff;
+        background-color: #f0f8ff;
+      }
+
+      .upload-label {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #444;
+        margin-bottom: 5px;
+      }
+
+      input[type="file"] {
+        cursor: pointer;
+        background: transparent;
+      }
+    }
+
+    /* === Yuklangan rasm preview === */
+    .image-preview {
+      text-align: center;
+      margin-top: 12px;
+      display: flex;
+      justify-content: center;
+
+      .preview-img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+        &:hover {
+          transform: scale(1.04);
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+        }
+      }
+    }
+
+    &__btn {
+      margin-top: 10px;
+      padding: 10px 15px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+
+      &:hover {
+        background: #0056b3;
+      }
+    }
+  }
+
+  // ====== PRODUCT LIST ======
+  &__list {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+
+    &__item {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s;
+
+      &:hover {
+        transform: translateY(-4px);
+      }
+
+      img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+
+      h3 {
+        margin: 10px 0 5px;
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+
+      p {
+        color: #007bff;
+        font-weight: 700;
+      }
+
+      button {
+        background: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 5px 10px;
+        cursor: pointer;
+        transition: background 0.2s;
+
+        &:hover {
+          background: #a71d2a;
+        }
+      }
+    }
+  }
+
+  // ====== DARK MODE ======
+  @media (prefers-color-scheme: dark) {
+    background: #121212;
+
+    h1 {
+      color: #f1f1f1;
+    }
+
+    &__form {
+      background: #1e1e1e;
+      box-shadow: 0 3px 10px rgba(255, 255, 255, 0.05);
+
+      input,
+      textarea {
+        background: #2a2a2a;
+        color: #f1f1f1;
+        border-color: #444;
+      }
+
+      .upload-label {
+        color: #aaa;
+      }
+
+      .image-upload {
+        background-color: #2a2a2a;
+        border-color: #444;
+
+        &:hover {
+          border-color: #1e90ff;
+          background-color: #333;
+        }
+      }
+
+      .image-preview .preview-img {
+        border-color: #444;
+        box-shadow: 0 3px 10px rgba(255, 255, 255, 0.05);
+      }
+
+      &__btn {
+        background: #4dabf7;
+
+        &:hover {
+          background: #1c7ed6;
+        }
+      }
+    }
+
+    &__list {
+      &__item {
+        background: #1f1f1f;
+        color: #eaeaea;
+        box-shadow: 0 2px 8px rgba(255, 255, 255, 0.05);
+
+        p {
+          color: #4dabf7;
+        }
+
+        button {
+          background: #fa5252;
+
+          &:hover {
+            background: #c92a2a;
+          }
+        }
+      }
+    }
+  }
+
+  // ====== RESPONSIVE DESIGN ======
+  @media (max-width: 768px) {
+    max-width: 100%;
+    padding: 10px;
+
+    &__form {
+      padding: 15px;
+
+      input,
+      textarea {
+        font-size: 0.95rem;
+      }
+
+      .preview-img {
+        width: 120px;
+        height: 120px;
+      }
+    }
+
+    &__list {
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+  }
+
+  @media (max-width: 500px) {
+    &__list {
+      grid-template-columns: 1fr;
+    }
+
+    &__form {
+      input,
+      textarea {
+        font-size: 0.9rem;
+      }
+
+      .preview-img {
+        width: 90px;
+        height: 90px;
+        border-radius: 6px;
+      }
+    }
+  }
+}
