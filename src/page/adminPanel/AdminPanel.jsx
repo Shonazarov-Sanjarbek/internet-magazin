@@ -1,7 +1,7 @@
-// src/page/adminPanel/AdminPanel.jsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getProducts, addProduct, deleteProduct } from "../../api/products";
+
 
 export default function AdminPanel() {
   const navigate = useNavigate();
@@ -32,13 +32,13 @@ export default function AdminPanel() {
     setNewProduct({ title: "", price: "", description: "", thumbnail: "" });
   };
 
-  // o‘chirish
+  // mahsulotni o‘chirish
   const handleDelete = async (id) => {
     const updated = await deleteProduct(id);
     setProducts(updated);
   };
 
-  // Fayl tanlashdan keyin preview olish
+  // Fayl tanlash — preview uchun
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -72,22 +72,11 @@ export default function AdminPanel() {
           required
         />
 
-        {/* URL orqali kiritish */}
-        {/* <input
-          type="text"
-          placeholder="Rasm URL (ixtiyoriy)"
-          value={newProduct.thumbnail}
-          onChange={(e) =>
-            setNewProduct({ ...newProduct, thumbnail: e.target.value })
-          }
-        /> */}
-
         <div className="image-upload">
           <label className="upload-label">Rasm kiriting</label>
           <input type="file" accept="image/*" onChange={handleImageUpload} />
         </div>
 
-        {/* Rasm preview */}
         {newProduct.thumbnail && (
           <div className="image-preview">
             <img
