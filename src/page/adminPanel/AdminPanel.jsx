@@ -77,12 +77,12 @@ export default function AdminPanel() {
         />
 
         {/* Rasm URL kiritish */}
-        <input
+        {/* <input
           type="text"
           placeholder="Rasm URL (https://...)"
           value={newProduct.thumbnail.startsWith("blob:") ? "" : newProduct.thumbnail}
           onChange={(e) => setNewProduct({ ...newProduct, thumbnail: e.target.value })}
-        />
+        /> */}
 
 
         <textarea

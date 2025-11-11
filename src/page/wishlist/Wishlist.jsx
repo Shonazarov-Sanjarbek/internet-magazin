@@ -1,27 +1,27 @@
 import { useWishlist } from "../../context/wishlistcontext/WishlistContext";
 
-export default function WishlistPage() {
-  const { wishlist, removeFromWishlist, clearWishlist } = useWishlist();
+export default function Wishlist() {
+  const { wishlist, removeFromWishlist } = useWishlist();
 
   return (
     <div className="wishlist-page">
-      <h1>💖 Wishlist</h1>
+      <h2>❤️ Wishlist</h2>
+
       {wishlist.length === 0 ? (
-        <p>Hali mahsulot qo‘shilmagan</p>
+        <p className="empty">Wishlist bo‘sh</p>
       ) : (
-        <>
-          <button onClick={clearWishlist}>Tozalash</button>
-          <div className="wishlist-list">
-            {wishlist.map((item) => (
-              <div key={item.id} className="wishlist-item">
-                <img src={item.thumbnail} alt={item.title} />
-                <h3>{item.title}</h3>
+        <ul className="wishlist-list">
+          {wishlist.map((item) => (
+            <li key={item.id} className="wishlist-item">
+              <img src={item.thumbnail} alt={item.title} />
+              <div className="info">
+                <h4>{item.title}</h4>
                 <p>${item.price}</p>
-                <button onClick={() => removeFromWishlist(item.id)}>❌ O‘chirish</button>
               </div>
-            ))}
-          </div>
-        </>
+              <button onClick={() => removeFromWishlist(item.id)}>❌</button>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );

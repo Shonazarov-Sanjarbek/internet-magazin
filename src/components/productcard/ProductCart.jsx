@@ -1,36 +1,72 @@
+import React, { useState } from "react";
+import { Card, Button, Tooltip } from "antd";
+import {
+  ShoppingCartOutlined,
+  HeartOutlined,
+  HeartFilled,
+} from "@ant-design/icons";
 import { useCart } from "../../context/cartcontext/CartContext";
-import { useAuth } from "../../context/authcontext/AuthContext";
 import { useWishlist } from "../../context/wishlistcontext/WishlistContext";
+
+const { Meta } = Card;
 
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
-  const { addToWishlist } = useWishlist();
-  const { user } = useAuth();
+  const { addToWishlist, wishlist } = useWishlist();
+  const [liked, setLiked] = useState(false);
+
+  // Mahsulot mavjudligini count bo'yicha tekshirish
+  const isAvailable = product.count > 0;
+
+  const handleWishlist = () => {
+    setLiked(!liked);
+    addToWishlist(product);
+  };
+
+  const handleBuy = () => {
+    if (!isAvailable) return; // agar mavjud bo'lmasa hech narsa qilmaydi
+    addToCart(product);
+  };
 
   return (
     <div className="product-card">
-      <img src={product.thumbnail} alt={product.title} />
-      <h3>{product.title}</h3>
-      <p>${product.price}</p>
-      <p>{product.stock} dona mavjud</p>
+      <div className="image-wrapper">
+        <img src={product.thumbnail} alt={product.title} />
+      </div>
+
+      <div className="card-content">
+        <h3>{product.title}</h3>
+        <p className="price">${product.price}</p>
+        <p className={`stock ${isAvailable ? "in" : "out"}`}>
+          {isAvailable
+            ? `${product.count} dona mavjud`
+            : "❌ Sotuvda yo‘q"}
+        </p>
+      </div>
 
       <div className="product-actions">
-        {/* Savatchaga qo‘shish */}
-        {user?.role === "user" && product.stock > 0 && (
-          <button className="btn add" onClick={() => addToCart(product)}>
-            🛒 Savatchaga qo‘shish
-          </button>
-        )}
+        <Tooltip title={isAvailable ? "Savatchaga qo‘shish" : "Sotuvda yo‘q"}>
+          <Button
+            shape="circle"
+            icon={<ShoppingCartOutlined />}
+            onClick={handleBuy}
+            disabled={!isAvailable} // count 0 bo'lsa tugma disable
+          />
+        </Tooltip>
 
-        {/* Wishlistga qo‘shish */}
-        {user?.role === "user" && (
-          <button className="btn wish" onClick={() => addToWishlist(product)}>
-            💖 Wishlistga qo‘shish
-          </button>
-        )}
-
-        {/* Mahsulot tugagan bo‘lsa */}
-        {product.stock === 0 && <p className="out">❌ Sotuvda yo‘q</p>}
+        <Tooltip title="Sevimlilarga qo‘shish">
+          <Button
+            shape="circle"
+            icon={
+              liked ? (
+                <HeartFilled style={{ color: "#ff4d4f" }} />
+              ) : (
+                <HeartOutlined style={{ color: "#ff4d4f" }} />
+              )
+            }
+            onClick={handleWishlist}
+          />
+        </Tooltip>
       </div>
     </div>
   );

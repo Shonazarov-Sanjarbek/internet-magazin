@@ -1,16 +1,24 @@
-// src/components/navbar/Navbar.scss
+// === Ranglar palitrasi ===
+$bg-color: #f8f9fa;
+$text-color: #2c2c2c;
+$accent-color: #ff6b6b;
+$accent-hover: #ff4d4d;
+$badge-bg: #ff6b6b;
+
+// === Navbar umumiy ===
 .navbar {
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  width: 100%;
+  background: $bg-color;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
-  z-index: 100;
-  width: 100%;
+  z-index: 1000;
 
   &__container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 1rem 2rem;
+    padding: 10px 20px;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -19,56 +27,114 @@
   &__logo {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #2c3e50;
+    color: $accent-color;
     text-decoration: none;
+    transition: 0.3s ease;
+
+    &:hover {
+      color: $accent-hover;
+    }
   }
 
   &__links {
-    display: flex;
-    gap: 1.5rem;
     list-style: none;
+    display: flex;
+    gap: 25px;
+    align-items: center;
 
-    a {
-      text-decoration: none;
-      color: #333;
-      font-weight: 500;
-      transition: color 0.2s;
+    li {
+      position: relative;
 
-      &:hover {
-        color: #007bff;
+      a {
+        text-decoration: none;
+        color: $text-color;
+        font-weight: 500;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: 0.3s ease;
+
+        &:hover {
+          color: $accent-color;
+        }
+
+        // === Badge (raqam) ===
+        .count {
+          position: absolute;
+          top: -8px;
+          right: -12px;
+          background: $badge-bg;
+          color: white;
+          font-size: 12px;
+          font-weight: 600;
+          padding: 2px 6px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 18px;
+          animation: pop 0.3s ease;
+
+          @keyframes pop {
+            0% {
+              transform: scale(0.6);
+            }
+            70% {
+              transform: scale(1.2);
+            }
+            100% {
+              transform: scale(1);
+            }
+          }
+        }
       }
     }
   }
+}
 
-  &__auth {
-    .navbar__btn {
-      background: #007bff;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: all 0.2s ease;
+// === Responsiv dizayn ===
 
-      &:hover {
-        background: #0056b3;
-      }
-    }
-  }
-
-  /* 🔹 Responsiv dizayn */
-  @media (max-width: 768px) {
-    &__links {
-      display: none;
-    }
-
+// Tablet (≤ 992px)
+@media (max-width: 992px) {
+  .navbar {
     &__container {
-      justify-content: space-between;
+      padding: 10px 15px;
     }
 
-    &__auth {
-      .navbar__btn {
-        padding: 0.4rem 0.8rem;
+    &__links {
+      gap: 15px;
+
+      a {
+        font-size: 0.95rem;
+      }
+    }
+  }
+}
+
+// Mobil (≤ 600px)
+@media (max-width: 600px) {
+  .navbar {
+    &__container {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    &__links {
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+      gap: 12px;
+
+      li {
+        width: 100%;
+
+        a {
+          width: 100%;
+          padding: 8px 0;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
       }
     }
   }

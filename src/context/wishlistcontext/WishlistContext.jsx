@@ -1,52 +1,29 @@
-// src/context/wishlistcontext/WishlistContext.jsx
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
-// Context yaratamiz
 const WishlistContext = createContext();
 
-// Provider komponent
 export function WishlistProvider({ children }) {
-  const [wishlist, setWishlist] = useState(() => {
-    const saved = localStorage.getItem("wishlist");
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [wishlist, setWishlist] = useState([]);
 
-  // LocalStorage’ga avtomatik saqlash
-  useEffect(() => {
-    localStorage.setItem("wishlist", JSON.stringify(wishlist));
-  }, [wishlist]);
-
-  // Wishlistga mahsulot qo‘shish
   const addToWishlist = (product) => {
-    const exists = wishlist.find((item) => item.id === product.id);
-    if (!exists) {
-      setWishlist([product, ...wishlist]);
+    if (!wishlist.find((item) => item.id === product.id)) {
+      setWishlist([...wishlist, product]);
     }
   };
 
-  // Wishlistdan o‘chirish
   const removeFromWishlist = (id) => {
-    const updated = wishlist.filter((item) => item.id !== id);
-    setWishlist(updated);
+    setWishlist(wishlist.filter((item) => item.id !== id));
   };
-
-  // Hammasini tozalash
-  const clearWishlist = () => setWishlist([]);
 
   return (
     <WishlistContext.Provider
-      value={{ wishlist, addToWishlist, removeFromWishlist, clearWishlist }}
+      value={{ wishlist, addToWishlist, removeFromWishlist }}
     >
       {children}
     </WishlistContext.Provider>
   );
 }
 
-// Context’dan foydalanish uchun hook
 export function useWishlist() {
-  const context = useContext(WishlistContext);
-  if (!context) {
-    throw new Error("useWishlist faqat <WishlistProvider> ichida ishlashi kerak");
-  }
-  return context;
+  return useContext(WishlistContext);
 }

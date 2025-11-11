@@ -1,0 +1,113 @@
+.wishlist-page {
+  padding: 2rem;
+  background: #f9f9f9;
+  min-height: 100vh;
+  text-align: center;
+
+  h2 {
+    margin-bottom: 1rem;
+    color: #222;
+  }
+
+  .empty {
+    color: #888;
+    font-size: 1.1rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 700px;
+  }
+
+  li {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: scale(1.02);
+    }
+
+    img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .info {
+      flex-grow: 1;
+      text-align: left;
+      margin-left: 1rem;
+
+      h4 {
+        margin: 0;
+        color: #333;
+      }
+
+      p {
+        margin: 0.2rem 0;
+        color: #007bff;
+        font-weight: 600;
+      }
+
+      span {
+        color: #555;
+        font-size: 0.9rem;
+      }
+    }
+
+    button {
+      background: #ff4d4f;
+      border: none;
+      color: #fff;
+      font-size: 1rem;
+      border-radius: 8px;
+      padding: 0.4rem 0.7rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: #d9363e;
+      }
+    }
+  }
+
+  .clear-btn {
+    margin-top: 1.5rem;
+    background: #007bff;
+    border: none;
+    color: #fff;
+    padding: 0.7rem 1.4rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #0056b3;
+    }
+  }
+}
+
+/* Responsiv */
+@media (max-width: 768px) {
+  .cart-page ul li,
+  .wishlist-page ul li {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    .info {
+      margin: 0.5rem 0;
+    }
+  }
+}
