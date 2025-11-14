@@ -335,7 +335,7 @@ table {
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
+  justify-content: center;
   background: #fff;
   border-radius: 14px;
   padding: 20px;
@@ -456,6 +456,7 @@ table {
 .cart-page .order-form form .form-buttons {
   display: flex;
   justify-content: space-between;
+  align-items: none;
   margin-top: 10px;
 }
 .cart-page .order-form form .form-buttons button {
