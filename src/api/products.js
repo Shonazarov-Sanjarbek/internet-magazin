@@ -10,9 +10,7 @@ export async function getProducts() {
 export async function addProduct(product) {
   const res = await fetch(API_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(product),
   });
   return res.json();
@@ -22,5 +20,15 @@ export async function addProduct(product) {
 export async function deleteProduct(id) {
   await fetch(`${API_URL}/${id}`, { method: "DELETE" });
   const res = await fetch(API_URL);
+  return res.json();
+}
+
+// 🔥 Mahsulotni YANGILASH (count kamaytirish uchun)
+export async function updateProduct(id, data) {
+  const res = await fetch(`${API_URL}/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
   return res.json();
 }

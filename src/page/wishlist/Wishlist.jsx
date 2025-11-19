@@ -6,8 +6,8 @@ export default function Wishlist() {
   const { addToCart } = useCart();
 
   const handleAddToCart = (item) => {
-    addToCart(item);             // Cartga qo‘shish
-    removeFromWishlist(item.id); // Wishlistdan o'chirish
+    addToCart(item);
+    removeFromWishlist(item.id);
   };
 
   return (

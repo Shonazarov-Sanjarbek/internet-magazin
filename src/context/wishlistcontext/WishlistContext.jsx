@@ -1,15 +1,17 @@
+// context/wishlistcontext/WishlistContext.jsx
 import { createContext, useContext, useState, useEffect } from "react";
 
 const WishlistContext = createContext();
 
 export const WishlistProvider = ({ children }) => {
-  const [wishlist, setWishlist] = useState([]);
 
-  useEffect(() => {
-    const savedWishlist = localStorage.getItem("wishlist");
-    if (savedWishlist) setWishlist(JSON.parse(savedWishlist));
-  }, []);
+  // ✅ 1. BOSHLANG‘ICH MA’LUMOTNI localStorage DAN OLYAPMAN
+  const [wishlist, setWishlist] = useState(() => {
+    const saved = localStorage.getItem("wishlist");
+    return saved ? JSON.parse(saved) : [];
+  });
 
+  // ✅ 2. Wishlist o‘zgarganda localStorage ga yozamiz
   useEffect(() => {
     localStorage.setItem("wishlist", JSON.stringify(wishlist));
   }, [wishlist]);
@@ -24,9 +26,7 @@ export const WishlistProvider = ({ children }) => {
     setWishlist(prev => prev.filter(item => item.id !== id));
   };
 
-  const clearWishlist = () => {
-    setWishlist([]);
-  };
+  const clearWishlist = () => setWishlist([]);
 
   return (
     <WishlistContext.Provider value={{ wishlist, addToWishlist, removeFromWishlist, clearWishlist }}>

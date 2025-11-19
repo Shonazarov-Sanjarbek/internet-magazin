@@ -1,11 +1,17 @@
 import { useState, useEffect } from "react";
 import { useCart } from "../../context/cartcontext/CartContext";
 import { sendTelegramMessage } from "../../api/sendTelegram";
+import { updateProduct } from "../../api/products"; // 🔥 MUHIM IMPORT
 
 export default function Cart() {
   const { cartItems, updateCartItemQty, removeFromCart, clearCart } = useCart();
   const [selectedItem, setSelectedItem] = useState(null);
-  const [form, setForm] = useState({ name: "", phone: "", address: "", comment: "" });
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    address: "",
+    comment: "",
+  });
 
   // LocalStorage dan yuklash
   useEffect(() => {
@@ -14,13 +20,13 @@ export default function Cart() {
 
     const savedCart = localStorage.getItem("cartItems");
     if (savedCart) {
-      JSON.parse(savedCart).forEach(item =>
+      JSON.parse(savedCart).forEach((item) =>
         updateCartItemQty(item.id, item.qty)
       );
     }
   }, []);
 
-  // Form va Cart ni localStorage ga saqlash
+  // LocalStorage ga saqlash
   useEffect(() => {
     localStorage.setItem("orderForm", JSON.stringify(form));
   }, [form]);
@@ -34,10 +40,11 @@ export default function Cart() {
 
   const handleBuyClick = (item) => setSelectedItem(item);
 
+  // 🔥 ENGI MUHIM QISM – butun funksiyani yangilab qo‘ydim
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.name || !form.phone)
-      return alert("Iltimos, ism va telefon raqamni kiriting!");
+      return alert("Ism va telefon raqam kerak!");
 
     const message = `
 🛒 *Yangi sotuv!*
@@ -51,9 +58,16 @@ export default function Cart() {
 🔢 Soni: 1 dona
     `;
 
+    // 1) Telegramga yuborish
     await sendTelegramMessage(message);
 
-    // Cart item qty kamaytirish
+    // 2) API dagi count ni -1 qilish (eng asosiy joy)
+    await updateProduct(selectedItem.id, {
+      ...selectedItem,
+      count: selectedItem.count - 1, // 🔥 API count kamayadi  
+    });
+
+    // 3) Cart qty kamaytirish
     const newQty = selectedItem.qty - 1;
     if (newQty > 0) updateCartItemQty(selectedItem.id, newQty);
     else removeFromCart(selectedItem.id);
@@ -108,7 +122,7 @@ export default function Cart() {
             <input
               type="tel"
               name="phone"
-              placeholder="Telefon raqamingiz"
+              placeholder="Telefon raqami"
               value={form.phone}
               onChange={handleChange}
               required
@@ -117,14 +131,14 @@ export default function Cart() {
             <input
               type="text"
               name="address"
-              placeholder="Manzil (ixtiyoriy)"
+              placeholder="Manzil"
               value={form.address}
               onChange={handleChange}
             />
 
             <textarea
               name="comment"
-              placeholder="Qo‘shimcha izoh"
+              placeholder="Izoh"
               value={form.comment}
               onChange={handleChange}
             />
