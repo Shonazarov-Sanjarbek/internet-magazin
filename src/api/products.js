@@ -1,34 +1,26 @@
-const API_URL = "https://68e7e19a10e3f82fbf412882.mockapi.io/products";
+// src/api/product.js
+import axios from "./axiosInstance"; // agar sendagi fayl boshqa bo‘lsa ayt
 
-// Barcha mahsulotlarni olish
-export async function getProducts() {
-  const res = await fetch(API_URL);
-  return res.json();
-}
+// Barcha productlarni olish
+export const getProducts = async () => {
+  const res = await axios.get("/products");
+  return res.data;
+};
 
-// Yangi mahsulot qo‘shish
-export async function addProduct(product) {
-  const res = await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(product),
-  });
-  return res.json();
-}
+// Product qo‘shish (CREATE)
+export const addProduct = async (product) => {
+  const res = await axios.post("/products", product);
+  return res.data;
+};
 
-// Mahsulotni o‘chirish
-export async function deleteProduct(id) {
-  await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-  const res = await fetch(API_URL);
-  return res.json();
-}
+// Product o‘chirish (DELETE)
+export const deleteProduct = async (id) => {
+  const res = await axios.delete(`/products/${id}`);
+  return res.data;
+};
 
-// 🔥 Mahsulotni YANGILASH (count kamaytirish uchun)
-export async function updateProduct(id, data) {
-  const res = await fetch(`${API_URL}/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  });
-  return res.json();
-}
+// Product yangilash (UPDATE)
+export const updateProduct = async (id, updatedData) => {
+  const res = await axios.put(`/products/${id}`, updatedData);
+  return res.data;
+};

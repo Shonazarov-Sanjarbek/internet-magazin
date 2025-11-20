@@ -1,109 +1,102 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { getProducts, addProduct, deleteProduct } from "../../api/products";
+import { useEffect, useState } from "react";
+import {
+  getProducts,
+  addProduct,
+  deleteProduct,
+  updateProduct,
+} from "../../api/products";
 
 export default function AdminPanel() {
-  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
-  const [newProduct, setNewProduct] = useState({
-    title: "",
-    price: "",
-    description: "",
-    thumbnail: "",
-  });
+  const [form, setForm] = useState({ title: "", price: "", thumbnail: "" }); // ⚡ image → thumbnail
+  const [editId, setEditId] = useState(null);
 
-  // 🔒 faqat admin kirishi uchun
-  useEffect(() => {
-    const isAdmin = localStorage.getItem("adminAuth");
-    if (!isAdmin) navigate("/admin");
-  }, [navigate]);
+  const fetchProducts = async () => {
+    const data = await getProducts();
+    setProducts(data);
+  };
 
-  // 📦 mavjud mahsulotlarni olish
   useEffect(() => {
-    getProducts().then(setProducts);
+    fetchProducts();
   }, []);
 
-  // 🆕 yangi mahsulot qo‘shish
-  const handleAddProduct = async (e) => {
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Agar foydalanuvchi blob URL (local preview) yuborsa, to‘xtatamiz
-    if (newProduct.thumbnail.startsWith("blob:")) {
-      alert("Iltimos, haqiqiy rasm URL kiriting (yoki rasmni serverga yuklang).");
-      return;
+    if (editId) {
+      await updateProduct(editId, form);
+    } else {
+      await addProduct(form);
     }
 
-    const added = await addProduct(newProduct);
-    setProducts([added, ...products]);
-    setNewProduct({ title: "", price: "", description: "", thumbnail: "" });
+    setForm({ title: "", price: "", thumbnail: "" });
+    setEditId(null);
+    fetchProducts();
   };
 
-  // ❌ mahsulotni o‘chirish
   const handleDelete = async (id) => {
     await deleteProduct(id);
-    const updated = await getProducts();
-    setProducts(updated);
+    fetchProducts();
   };
 
-  // 🖼 Fayl yuklash (preview uchun)
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setNewProduct({ ...newProduct, thumbnail: imageUrl });
-    }
+  const handleEdit = (product) => {
+    setEditId(product.id);
+    setForm({
+      title: product.title,
+      price: product.price,
+      thumbnail: product.thumbnail, // ⚡ image → thumbnail
+    });
   };
 
   return (
     <div className="admin-panel">
-      <h1>👑 Admin Panel</h1>
+      <h1>Admin Panel – Products</h1>
 
-      {/* Qo‘shish formasi */}
-      <form className="admin-panel__form" onSubmit={handleAddProduct}>
+      {/* FORM */}
+      <form className="admin-panel__form" onSubmit={handleSubmit}>
         <input
-          type="text"
-          placeholder="Mahsulot nomi"
-          value={newProduct.title}
-          onChange={(e) => setNewProduct({ ...newProduct, title: e.target.value })}
+          name="title"
+          value={form.title}
+          onChange={handleChange}
+          placeholder="Product Title"
           required
         />
-
         <input
-          type="number"
-          placeholder="Narx"
-          value={newProduct.price}
-          onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+          name="price"
+          value={form.price}
+          onChange={handleChange}
+          placeholder="Price"
           required
         />
-
-        {/* Rasm URL kiritish */}
-        {/* <input
-          type="text"
-          placeholder="Rasm URL (https://...)"
-          value={newProduct.thumbnail.startsWith("blob:") ? "" : newProduct.thumbnail}
-          onChange={(e) => setNewProduct({ ...newProduct, thumbnail: e.target.value })}
-        /> */}
-
-
-        <textarea
-          placeholder="Tavsif"
-          value={newProduct.description}
-          onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+        <input
+          name="thumbnail" // ⚡ image → thumbnail
+          value={form.thumbnail}
+          onChange={handleChange}
+          placeholder="Image URL"
+          required
         />
-
-        <button type="submit" className="admin-panel__btn">➕ Qo‘shish</button>
+        <button type="submit" className="admin-panel__btn">
+          {editId ? "Update Product" : "Add Product"}
+        </button>
       </form>
 
-      {/* Mahsulotlar ro‘yxati */}
+      {/* PRODUCT LIST */}
       <div className="admin-panel__list">
         {products.map((p) => (
           <div key={p.id} className="admin-panel__item">
-            <img src={p.thumbnail || "/noimage.png"} alt={p.title} />
-            <div className="info">
-              <h3>{p.title}</h3>
-              <p>${p.price}</p>
+            <img
+              src={p.thumbnail || "/noimage.png"} // ⚡ fallback rasm qo‘shildi
+              alt={p.title}
+            />
+            <h3>{p.title}</h3>
+            <p>${p.price}</p>
+            <div className="admin-panel__actions">
+              <button onClick={() => handleEdit(p)}>Edit</button>
+              <button onClick={() => handleDelete(p.id)}>Delete</button>
             </div>
-            <button onClick={() => handleDelete(p.id)}>❌</button>
           </div>
         ))}
       </div>

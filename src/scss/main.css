@@ -721,6 +721,7 @@ table {
   max-width: 1000px;
   margin: auto;
   color: #222;
+  /* RESPONSIVE */
 }
 .admin-panel h1 {
   text-align: center;
@@ -798,7 +799,11 @@ table {
      object-fit: cover;
   border-radius: 8px;
 }
-.admin-panel__item button {
+.admin-panel__item .admin-panel__actions {
+  display: flex;
+  gap: 8px;
+}
+.admin-panel__item .admin-panel__actions button {
   background: #dc3545;
   color: #fff;
   border: none;
@@ -807,10 +812,9 @@ table {
   cursor: pointer;
   font-size: 14px;
 }
-.admin-panel__item button:hover {
+.admin-panel__item .admin-panel__actions button:hover {
   background: #b02a37;
 }
-
 @media (max-width: 768px) {
   .admin-panel__form {
     padding: 15px;
